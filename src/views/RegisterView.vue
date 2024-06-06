@@ -66,6 +66,11 @@ export default {
     TextInput,
     LoadingComp
   },
+  beforeCreate() {
+    if (sessionStorage.getItem('token')) {
+      this.$router.push('/')
+    }
+  },
   data() {
     return {
       email: '',

@@ -50,7 +50,7 @@ export default {
     TextInput,
     LoadingComp
   },
-  created() {
+  beforeCreate() {
     if (sessionStorage.getItem('token')) {
       this.$router.push('/')
     }

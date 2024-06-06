@@ -10,7 +10,7 @@ import TodoList from '../components/TodoList.vue'
 
 <script>
 export default {
-  created() {
+  beforeCreate() {
     if (!sessionStorage.getItem('token')) {
       this.$router.push('/login')
     }
