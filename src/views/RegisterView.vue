@@ -1,8 +1,15 @@
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
     <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
-      <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
+      <h2 class="text-2xl font-bold mb-6 text-center">Register</h2>
       <form @submit.prevent="handleSubmit">
+        <TextInput
+          id="email"
+          label="Email"
+          placeholder="Enter your email"
+          v-model="email"
+          :errorMessage="emailError"
+        />
         <TextInput
           id="username"
           label="Username"
@@ -18,20 +25,29 @@
           v-model="password"
           :errorMessage="passwordError"
         />
+        <TextInput
+          id="confirmPassword"
+          type="password"
+          label="Confirm Password"
+          placeholder="Confirm your password"
+          v-model="confirmPassword"
+          :errorMessage="confirmPasswordError"
+        />
+        <p class="text-red-500 text-xs italic mt-2">{{ serverError }}</p>
         <div class="flex flex-row space-x-1">
-          <router-link to="/register">
+          <router-link to="/login">
             <button
               type="button"
               class="w-full bg-blue-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4 hover:bg-blue-700"
             >
-              Register
+              Login
             </button>
           </router-link>
           <button
             type="submit"
             class="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4 hover:bg-blue-700"
           >
-            Login
+            Register
           </button>
           <loading-comp :isLoading="processing" />
         </div>
@@ -50,25 +66,32 @@ export default {
     TextInput,
     LoadingComp
   },
-  created() {
-    if (sessionStorage.getItem('token')) {
-      this.$router.push('/')
-    }
-  },
   data() {
     return {
+      email: '',
       username: '',
       password: '',
+      confirmPassword: '',
+      emailError: '',
       usernameError: '',
       passwordError: '',
+      confirmPasswordError: '',
+      serverError: '',
       processing: false
     }
   },
   methods: {
     async handleSubmit() {
+      this.emailError = ''
       this.usernameError = ''
       this.passwordError = ''
-      console.log('Logging in with', this.username, this.password)
+      this.confirmPasswordError = ''
+
+      // Basic validation
+      if (!this.email.includes('@')) {
+        this.emailError = 'Please enter a valid email address'
+      }
+
       if (this.username.length < 3) {
         this.usernameError = 'Username must be at least 3 characters long'
       }
@@ -77,23 +100,33 @@ export default {
         this.passwordError = 'Password must be at least 6 characters long'
       }
 
-      if (!this.usernameError && !this.passwordError) {
+      if (this.password !== this.confirmPassword) {
+        this.confirmPasswordError = 'Passwords do not match'
+      }
+
+      if (
+        !this.emailError &&
+        !this.usernameError &&
+        !this.passwordError &&
+        !this.confirmPasswordError
+      ) {
         this.processing = true
         axiosClient
-          .post('/account/login', {
+          .post('/account/register', {
+            email: this.email,
             username: this.username,
             password: this.password
           })
           .then((response) => {
-            console.log('Login successful', response)
+            console.log('Registration successful', response)
             sessionStorage.setItem('token', response.data.token)
             this.processing = false
             this.$router.push('/')
           })
           .catch((error) => {
             this.processing = false
-            console.error('Login failed', error)
-            this.usernameError = 'Invalid username or password'
+            console.error('Registration failed', error)
+            this.serverError = error.response.data.message
           })
       }
     }
