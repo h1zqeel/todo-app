@@ -1,16 +1,14 @@
-# todo-app
+# Todo App
 
-This template should help get you started developing with Vue 3 in Vite.
+This Vue application is designed to work seamlessly with the .NET Web API available at [https://github.com/h1zqeel/todo-dotnet-api](https://github.com/h1zqeel/todo-dotnet-api).
 
-## Recommended IDE Setup
+## Customize Configuration
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+To customize the configuration, refer to the [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ## Project Setup
+
+To set up the project, execute the following command:
 
 ```sh
 npm install
@@ -18,23 +16,23 @@ npm install
 
 ### Compile and Hot-Reload for Development
 
+For development with hot-reloading, use:
+
 ```sh
 npm run dev
 ```
 
 ### Compile and Minify for Production
 
+To compile and minify the application for production, run:
+
 ```sh
 npm run build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
-
 ### Lint with [ESLint](https://eslint.org/)
+
+To lint the code using ESLint, run:
 
 ```sh
 npm run lint
